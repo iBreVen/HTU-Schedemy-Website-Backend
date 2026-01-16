@@ -1,4 +1,3 @@
-
 package com.yazan.bank.Config;
 
 import com.yazan.bank.model.*;
@@ -12,12 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Configuration
 public class UserConfig {
+
     @Bean
-    CommandLineRunner commandLineRunner2(SchedulesRepository schedulesRepository,RoomRepository roomRepository, InstructorsRepository instructorsRepository, CoursesRepository coursesRepository, TimeSlotRepository timeSlotRepository) {
+    CommandLineRunner commandLineRunner2(
+            SchedulesRepository schedulesRepository,
+            RoomRepository roomRepository,
+            InstructorsRepository instructorsRepository,
+            CoursesRepository coursesRepository,
+            TimeSlotRepository timeSlotRepository
+    ) {
         return args -> {
+
+            // ---------- Instructors (IDEMPOTENT) ----------
             List<String> instructorNames = List.of(
                     "Dr. Adam Khalil",
                     "Dr. Lina Haddad",
@@ -70,14 +77,13 @@ public class UserConfig {
                     Department.COMPUTER_SCIENCE
             );
 
-
             System.out.println(instructorEmails.size());
             System.out.println(mappedJobTitles.size());
             System.out.println(departments.size());
             System.out.println(instructorNames.size());
 
+            // Build instructor objects
             List<Instructors> instructorsList = new ArrayList<>();
-
             for (int i = 0; i < instructorNames.size(); i++) {
                 Instructors instructor = new Instructors();
                 instructor.setName(instructorNames.get(i));
@@ -87,8 +93,17 @@ public class UserConfig {
                 instructorsList.add(instructor);
             }
 
-            instructorsRepository.saveAll(instructorsList);
+            // Save only missing instructors (prevents unique email crash)
+            for (Instructors i : instructorsList) {
+                String email = i.getEmail();
+                if (email == null || email.isBlank()) continue;
 
+                if (!instructorsRepository.existsByEmail(email)) {
+                    instructorsRepository.save(i);
+                }
+            }
+
+            // ---------- Courses ----------
             List<String> courseNames = List.of(
                     "Programming", "Advanced Programming", "Data Structures & Algorithms", "Software Development Lifecycles",
                     "Website Design & Development", "Prototyping", "Planning a Computing Project", "ERP Systems",
@@ -116,27 +131,35 @@ public class UserConfig {
                     Department.ARTIFICIAL_INTELLIGENCE
             );
 
-           List<Courses> coursesList = new ArrayList<>();
-            int size = Math.min(courseDepartments.size(),Math.min(courseNames.size(),departments.size()));
+            List<Courses> coursesList = new ArrayList<>();
+
+            // IMPORTANT: this was buggy in your original code:
+            // you computed size using "departments.size()" (instructor depts),
+            // and you also used "departments.get(i)" instead of "courseDepartments.get(i)".
+            int size = Math.min(courseDepartments.size(), courseNames.size());
 
             for (int i = 0; i < size; i++) {
-                Courses courses = new Courses();
-                courses.setName(courseNames.get(i));
-                courses.setDepartment(departments.get(i));
-                coursesList.add(courses);
+                Courses course = new Courses();
+                course.setName(courseNames.get(i));
+                course.setDepartment(courseDepartments.get(i));
+                coursesList.add(course);
             }
+
             coursesRepository.saveAll(coursesList);
 
-
-            //Rooms
+            // ---------- Rooms ----------
             List<String> roomnames = List.of(
                     "S-207","S-208","S-209","S-210","S-212","S-214","W07","W10","X1","X2",
                     "N-001","S-210", "S-212","Iman 7","Iman 8","N-001","iman12","X3"
             );
 
-            List<Rooms> rooms = roomnames.stream().map(room -> new Rooms(room)).collect(Collectors.toList());
+            List<Rooms> rooms = roomnames.stream()
+                    .map(Rooms::new)
+                    .collect(Collectors.toList());
+
             roomRepository.saveAll(rooms);
 
+            // ---------- TimeSlots ----------
             List<TimeSlots> slots = List.of(
                     // WEEKDAY Slots
                     new TimeSlots(Time.valueOf("08:30:00"), Time.valueOf("10:00:00"), DayType.WEEKDAY),
@@ -154,15 +177,12 @@ public class UserConfig {
 
             timeSlotRepository.saveAll(slots);
 
-            for(TimeSlots slot: slots){
-                for(Rooms room: rooms){
-                    schedulesRepository.save(new Schedules(
-                            slot,room
-                    ));
+            // ---------- Schedules ----------
+            for (TimeSlots slot : slots) {
+                for (Rooms room : rooms) {
+                    schedulesRepository.save(new Schedules(slot, room));
                 }
             }
         };
     }
 }
-
-
