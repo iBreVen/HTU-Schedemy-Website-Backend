@@ -13,8 +13,12 @@ import java.util.Optional;
 
 @Repository
 public interface InstructorsRepository extends JpaRepository<Instructors,Long> {
-    Optional<Instructors> findById(Long id);
+
     Optional<Instructors> findByName(String name);
+
+    Optional<Instructors> findByEmail(String email);
+    boolean existsByEmail(String email);
+
     List<Instructors> findByDepartmentAndJobTitle(Department department, String jobTitle);
     List<Instructors> findByDepartmentAndJobTitleNot(Department department, String jobTitle);
 
