@@ -1,4 +1,4 @@
-package com.yazan.bank.Config;
+package com.yazan.bank.config;
 
 import com.yazan.bank.model.*;
 import com.yazan.bank.repository.*;
