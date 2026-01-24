@@ -11,13 +11,13 @@ To address this issue, the university decided to develop an electronic applicati
 
 The application includes:
 
-    An Add Schedule page that allows adding courses to the semester schedule by specifying lecture time, course, assigned instructor, and teaching assistant.
+* An Add Schedule page that allows adding courses to the semester schedule by specifying lecture time, course, assigned instructor, and teaching assistant.
 
-    A View Schedule page that displays the complete schedule in a clear and organized format.
+* A View Schedule page that displays the complete schedule in a clear and organized format.
 
-    A Manage Courses page to view and manage available courses.
+* A Manage Courses page to view and manage available courses.
 
-    A Manage Instructors page to manage instructor information and their assigned courses.
+* A Manage Instructors page to manage instructor information and their assigned courses.
 
 The development team completed building the application. The back-end is implemented using Spring Boot, and the front-end is hosted in a separate GitHub repository.
 What I Built (DevOps Scope)
@@ -25,17 +25,17 @@ What I Built (DevOps Scope)
 I designed and implemented an AWS-based deployment that meets production requirements using managed AWS services and DevOps best practices: high availability, auto scaling, global access, monitoring & notifications, and safe updates with minimal downtime.​
 Key Outcomes
 
-    Front-end deployed using AWS Amplify (separate repo).​
+* Front-end deployed using AWS Amplify (separate repo).​
 
-    Back-end deployed on EC2 behind an Application Load Balancer (ALB) with Target Group health checks.​
+* Back-end deployed on EC2 behind an Application Load Balancer (ALB) with Target Group health checks.​
 
-    High availability using Auto Scaling Group (ASG) across multiple AZs.​
+* High availability using Auto Scaling Group (ASG) across multiple AZs.​
 
-    Global access using CloudFront (front-end) and DNS via Route 53 + TLS via ACM.​
+* Global access using CloudFront (front-end) and DNS via Route 53 + TLS via ACM.​
 
-    Continuous monitoring and notifications using CloudWatch alarms and SNS email notifications.​
+* Continuous monitoring and notifications using CloudWatch alarms and SNS email notifications.​
 
-    Safe updates using immutable deployments: artifact-based delivery + controlled rollout (Launch Template versioning + ASG Instance Refresh).​
+* Safe updates using immutable deployments: artifact-based delivery + controlled rollout (Launch Template versioning + ASG Instance Refresh).​
 
 Architecture (High Level)
 
@@ -62,20 +62,20 @@ I implemented a secure delivery pipeline using GitHub Actions with OIDC authenti
 
 Workflow behavior:
 
-    Build the application (Java 17 + Maven).​
+* Build the application (Java 17 + Maven).​
 
-    Upload the JAR artifact to S3: s3://<bucket>/releases/app.jar.​
+* Upload the JAR artifact to S3: s3://<bucket>/releases/app.jar.​
 
-    Trigger an Auto Scaling Group Instance Refresh for rolling updates.​
+* Trigger an Auto Scaling Group Instance Refresh for rolling updates.​
 
 How To Run Locally (Backend Only)
 
-(bash)
+```bash
 mvn clean package
 java -jar target/*.jar
 curl http://localhost:8080/instructor
 Evidence (Screenshots / Logs)
-
+```
 Because the AWS environment is not always running, I keep proof of successful deployment and rollout under:​
 
     docs/screenshots/ (OIDC provider, IAM policy, S3 artifact upload, ASG instance refresh, Target Group healthy targets, ALB endpoint response).​
