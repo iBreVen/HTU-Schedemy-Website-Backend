@@ -1,7 +1,3 @@
-COPY/PASTE (from the next line) — DO NOT include the “COPY/PASTE” lines.
-
-***
-
 # HTU Schedemy - Production AWS Deployment (DevOps Capstone)
 
 This repository contains the Spring Boot back-end for the HTU “Schedemy” scheduling system and documents how I deployed it on AWS as a production-ready platform (high availability, global access, monitoring/alerts, and safe updates).
