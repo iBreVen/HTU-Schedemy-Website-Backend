@@ -4,6 +4,10 @@ This repository contains the Spring Boot back-end for the HTU “Schedemy” sch
 
 Important: I do not keep the AWS environment running continuously to avoid charges on a free account; this repo contains the implementation, CI/CD workflow, and screenshots/log evidence from a successful deployment and rollout.
 
+## Quick links
+- Proof: [docs/PROOF.md](docs/PROOF.md)
+- CI/CD workflow: [.github/workflows/main.yml](.github/workflows/main.yml)
+
 ## Problem Statement
 
 At the beginning of each academic semester at HTU University, the academic administration faces challenges in organizing the process of course assignment for instructors and teaching assistants (TAs). Managing a large number of courses, instructors, and time slots often leads to scheduling conflicts and difficulties in tracking course assignments efficiently.
@@ -29,6 +33,7 @@ Key outcomes:
 - Global access using CloudFront (front-end) and DNS via Route 53 + TLS via ACM.
 - Continuous monitoring and notifications using CloudWatch alarms and SNS email notifications.
 - Safe updates using immutable deployments: artifact-based delivery + controlled rollout (Launch Template versioning + ASG Instance Refresh).
+- Front-end repository: https://github.com/iBreVen/HTU-Schedemy-Website
 
 ## Architecture (High Level)
 
@@ -69,10 +74,11 @@ Workflow behavior:
     java -jar target/*.jar
     curl http://localhost:8080/instructor
 
-## Evidence (Screenshots / Logs)
+### Evidence (Screenshots / Logs)
 
-Because the AWS environment is not always running, I keep proof of successful deployment and rollout under:
-- docs/screenshots/ (OIDC provider, IAM policy, S3 artifact upload, ASG instance refresh, Target Group healthy targets, ALB endpoint response)
+Evidence page (inline screenshots): [docs/PROOF.md](docs/PROOF.md)
+
+All screenshots are stored under: `docs/screenshots/`
 
 ## Notes / Cost Control
 
