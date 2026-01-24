@@ -59,7 +59,7 @@ Front-end path:
 | Notify critical events | SNS subscriptions + ASG notifications (launch/terminate/refresh events). |
 | Safe updates without interruption | Immutable artifact deployments + ASG Instance Refresh (rolling replacement with warm-up + health checks). |
 
-## CI/CD (Scenario 3)
+## CI/CD
 
 I implemented a secure delivery pipeline using GitHub Actions with OIDC authentication to AWS (no stored AWS access keys).
 
@@ -86,4 +86,4 @@ AWS resources were deployed, validated, and then torn down to avoid ongoing char
 
 ## Author
 
-Ayoub Alkhalayleh — DevOps Track Capstone (Scenarios 1–3).
+Ayoub Alkhalayleh.
